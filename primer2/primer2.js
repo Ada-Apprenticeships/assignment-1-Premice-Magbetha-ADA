@@ -1,26 +1,59 @@
+// Function to shuffle and deal cards
+export default function shuffleAndDeal(numPlayers, cardsPerPlayer, numDecks = 1) {
+    // Validate inputs
+    if (!Number.isInteger(numPlayers) || numPlayers <= 0) {
+        throw new Error("numPlayers must be a positive integer.");
+    }
+    if (!Number.isInteger(cardsPerPlayer) || cardsPerPlayer <= 0) {
+        throw new Error("cardsPerPlayer must be a positive integer.");
+    }
+    if (!Number.isInteger(numDecks) || numDecks <= 0) {
+        throw new Error("numDecks must be a positive integer.");
+    }
 
-// TODO: Write a function shuffleAndDeal(numPlayers, cardsPerPlayer, numDecks = 1)
-// that simulates shuffling and dealing a deck of cards.
+    // Create the deck
+    const suits = ["Hearts", "Diamonds", "Clubs", "Spades"];
+    const ranks = ["Ace", "2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King"];
 
-// TODO: Create a standard 52-card deck (or 104 if numDecks is 2).
+    const createDeck = () => suits.flatMap(suit => ranks.map(rank => `${rank} of ${suit}`));
+    let deck = Array(numDecks).fill(null).flatMap(createDeck);
 
-// TODO: Implement input validation to handle invalid inputs:
-//       -  numPlayers should be a positive integer.
-//       -  cardsPerPlayer should be a positive integer.
-//       -  Throw an error if the requested cards exceed the deck size.
+    // Check if there are enough cards to deal
+    const totalCardsNeeded = numPlayers * cardsPerPlayer;
+    if (totalCardsNeeded > deck.length) {
+        throw new Error(`Not enough cards in the deck. Requested ${totalCardsNeeded}, but only ${deck.length} available.`);
+    }
 
-// TODO: Shuffle the deck using a suitable algorithm
-//       -  Consider time complexity and randomness.
+    // Shuffle the deck using Fisher-Yates algorithm (O(n) time complexity)
+    const shuffle = (array) => {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]]; // Swap elements
+        }
+    };
+    shuffle(deck);
 
-// TODO: Deal cards to the specified number of players.
+    // Deal cards
+    const hands = Array.from({ length: numPlayers }, () => []);
+    for (let i = 0; i < cardsPerPlayer; i++) {
+        for (let j = 0; j < numPlayers; j++) {
+            hands[j].push(deck.pop());
+        }
+    }
 
-// TODO: Return the hands dealt as an array of arrays.
+    return hands;
+}
 
-// TODO: Test the function with various inputs, including edge cases:
-//       -  Dealing the entire deck.
-//       -  Single player.
-//       -  Minimum cards per hand.
+// Example usage
+const game = shuffleAndDeal(4, 5);
+console.log(game);
 
-
-export default shuffleAndDeal;
-
+/*
+Example Output:
+[
+  ["Ace of Spades", "3 of Clubs", "7 of Diamonds", "Jack of Hearts", "Queen of Spades"],
+  ["2 of Diamonds", "5 of Hearts", "6 of Clubs", "9 of Spades", "King of Diamonds"],
+  ["4 of Hearts", "8 of Clubs", "10 of Spades", "Jack of Diamonds", "Queen of Clubs"],
+  ["Ace of Clubs", "3 of Diamonds", "5 of Spades", "7 of Hearts", "10 of Clubs"]
+]
+*/
