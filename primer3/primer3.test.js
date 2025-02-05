@@ -1,5 +1,6 @@
 // Import the necessary modules
-import { createLinkedList, searchSocialMediaFeed } from './primer3.js'; // Adjust paths as needed
+const { createLinkedList, searchSocialMediaFeed } = require('./primer3');
+
 
 describe('Social Media Feed Search', () => {
   describe('Linked List Creation', () => {
