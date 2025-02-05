@@ -53,4 +53,4 @@ function searchSocialMediaFeed(feed, keyword) {
   return results;
 }
 
-export default { createLinkedList, searchSocialMediaFeed };
+module.exports = { createLinkedList, searchSocialMediaFeed };
