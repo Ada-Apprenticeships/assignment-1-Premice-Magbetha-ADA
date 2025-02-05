@@ -65,3 +65,5 @@ function temperatureConversion(temperature, fromScale, toScale) {
   // This should never be reached due to prior validation
   throw new Error("Unexpected error during conversion");
 }
+
+module.exports = temperatureConversion;
